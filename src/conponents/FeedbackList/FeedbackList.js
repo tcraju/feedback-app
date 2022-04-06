@@ -5,7 +5,7 @@ import FeedbackItem from './FeedbackItem/FeedbackItem';
 
 
 
-const FeedbackList = ({ handleDelete}) => {
+const FeedbackList = () => {
 
     const {feedback} = useContext(FeedbackContext)
 
@@ -26,7 +26,7 @@ const FeedbackList = ({ handleDelete}) => {
                exit={{opacity:0}}
                >
 
-                <FeedbackItem key={item.id} item={item} handleDelete={handleDelete}></FeedbackItem>
+                <FeedbackItem key={item.id} item={item}></FeedbackItem>
                 
                 </motion.div>
            ) )}
@@ -35,15 +35,7 @@ const FeedbackList = ({ handleDelete}) => {
         </div>
 
     );
-    // return (
-    //     <div className='feedback-list'>
-    //         {feedback.map((item) => (
-    //             <FeedbackItem key={item.id} item={item} handleDelete={handleDelete}></FeedbackItem>
-    //         ) )}
 
-    //     </div>
-
-    // );
 };
 
 export default FeedbackList;
