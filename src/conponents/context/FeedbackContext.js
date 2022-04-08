@@ -5,12 +5,28 @@ const FeedbackContext = createContext();
 
 export const FeedbackProvider = ({ children }) => {
   const [feedback, setFeedback] = useState([]);
+  const [isLoading, setIsLoading] = useState (true)
 
+
+  // useEffect(() => {
+  //   fetch("http://localhost:5000/feedback")
+  //     .then((res) => res.json())
+  //     .then((data) => setFeedback(data));
+  // }, []);
+
+  // Alternative method/ Better method
   useEffect(() => {
-    fetch("http://localhost:5000/feedback")
-      .then((res) => res.json())
-      .then((data) => setFeedback(data));
-  }, []);
+    fetchFeedback ()
+  }, [])
+
+  const fetchFeedback = async () => {
+    const response = await fetch(`http://localhost:5000/feedback?_sort=id&_order=desc`)
+    const data = await response.json()
+    setFeedback(data)
+    setIsLoading(false)
+  }
+
+
   // Feedback update functionality start
   const updateFeedback = (id, updItem) => {
     setFeedback(
@@ -37,11 +53,32 @@ export const FeedbackProvider = ({ children }) => {
     }
   };
 
-  const addFeedback = (newFeedback) => {
-    newFeedback.id = uuidv4();
-    console.log(newFeedback);
-    setFeedback([newFeedback, ...feedback]);
-  };
+
+
+
+  // const addFeedback = (newFeedback) => {
+  //   newFeedback.id = uuidv4();
+  //   console.log(newFeedback);
+  //   setFeedback([newFeedback, ...feedback]);
+  // };
+
+  const addFeedback = async (newFeedback) => {
+    const res = await fetch('/feedback',{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'},
+        body: JSON.stringify(newFeedback)
+      })
+      const data = await res.json()
+  
+      setFeedback([data, ...feedback]);
+    
+  }
+
+
+
+
+
 
   return (
     <FeedbackContext.Provider
@@ -52,6 +89,7 @@ export const FeedbackProvider = ({ children }) => {
         editFeedback,
         feedbackEdit,
         updateFeedback,
+        isLoading
       }}
     >
       {children}
